@@ -1,0 +1,12 @@
+Start project --> npm init -y
+
+semantic version -> 1.2.3 -> major.minor.patch
+semver version ->
+
+To run node project : node mainfile.js
+
+port no:- 0 - 65535 
+
+To automatic update server:-
+
+node --watch app.js 
