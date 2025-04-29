@@ -1,0 +1,12 @@
+const { ModifiedPathsSnapshot } = require('mongoose')
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination : function(req,file,cb){ //cb-->call back
+        cb(null,'./storage') //cb(error,success)
+    },
+    filename : function(req,file,cb){
+        cb(null,'saugat-'+file.originalname)
+    }
+})
+
+module.exports = {multer,storage}
