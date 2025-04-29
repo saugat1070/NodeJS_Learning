@@ -5,6 +5,9 @@ const Blog = require('./Model/blogModel');
 const app = express();
 app.use(express.json()) //eyo sabai project maa use garnu parcha
 
+//This multer middleware is used to handle file upload from fronted
+const {multer,storage} = require('./middleware/mutlerConfig')
+const upload = multer({storage : storage});
 
 connect_to_db()
 
@@ -30,9 +33,14 @@ app.get('/about',(req,res)=>{
     })
 })
 
-app.post('/blog',async (req,res)=>{
+app.post('/blog',upload.single('image'),async (req,res)=>{
     // console.log(req.body);
     const {title,subtitle,description,image} = req.body;
+    if(!title || !subtitle || !description || !image ){
+        return res.status(400).json({
+            message : "Check value of title,subtitle,describe or image"
+        })
+    }
     await Blog.create({
         title : title,
         subtitle:subtitle,
@@ -48,4 +56,38 @@ app.listen(process.env.PORT_NUMBER,()=>{
     console.log("NodeJs project has started");
 });
 
+app.post('/image_upload',upload.single('image'),async (req,res)=>{
+    let filename = null
+    const {title,subtitle,description} = req.body
+    console.log(req.file)
+    // if(req.file){
+    //     filename = 
+    // }
+    if(!title || !subtitle || !description){
+        return res.status(400).json({
+            message : "please provide title,subtitle,description"
+        })
+    }
+    if(req.file){
+        filename = req.file.filename
+    }
+
+    await Blog.create({
+        title : title,
+        subtitle : subtitle,
+        description : description,
+        image : filename
+    })
+    res.status(200).json({
+        message:"send response",
+    })
+})
+
+app.get("/blog",async (req,res)=>{
+    const blogs = await Blog.find()
+    res.status(200).json({
+         message:"blog fetch successfully",
+         data : blogs
+    })
+})
 
