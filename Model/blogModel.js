@@ -6,12 +6,14 @@ const blogSchema = new Schema({
   title: {
     type: String,
     unique: true,
+    null:false,
   },
   subtitle: {
     type: String,
   },
   description: {
     type: String,
+    null:false,
   },
   image: {
     type: String,
