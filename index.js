@@ -1,6 +1,10 @@
+require('dotenv').config()
 const express = require('express');
 const connect_to_db = require('./DataBase/db_connect');
+const Blog = require('./Model/blogModel');
 const app = express();
+app.use(express.json()) //eyo sabai project maa use garnu parcha
+
 
 connect_to_db()
 
@@ -26,7 +30,21 @@ app.get('/about',(req,res)=>{
     })
 })
 
-app.listen(3000,()=>{
+app.post('/blog',async (req,res)=>{
+    // console.log(req.body);
+    const {title,subtitle,description,image} = req.body;
+    await Blog.create({
+        title : title,
+        subtitle:subtitle,
+        description : description,
+        image : image
+    })
+    res.status(201).json({
+        message : "blog is created successfully"
+    })
+})
+
+app.listen(process.env.PORT_NUMBER,()=>{
     console.log("NodeJs project has started");
 });
 
