@@ -4,7 +4,7 @@ const connect_to_db = require('./DataBase/db_connect');
 const Blog = require('./Model/blogModel');
 const app = express();
 app.use(express.json()) //eyo sabai project maa use garnu parcha
-
+const fs = require('fs'); //to handle file delete or operation
 //This multer middleware is used to handle file upload from fronted
 const {multer,storage} = require('./middleware/mutlerConfig')
 const upload = multer({storage : storage});
@@ -106,10 +106,37 @@ app.get("/blog/:id", async (req,res)=>{
 
 app.delete('/blog/:id',async (req,res)=>{
     const param_id = req.params.id
+    const blog = await Blog.findById(param_id);
+    console.log(blog);
+    const fileName = blog.image;
+    console.log(fileName)
+    fs.unlink(`storage/${fileName}`,(error,success)=>{
+        if(error){
+            console.log(error);
+        }
+        else{
+            console.log("file deleted");
+        }
+    })
     await Blog.findByIdAndDelete(param_id);
     res.status(200).json({
         message : "blog is deleted"
     });
+})
+
+app.patch('/blog/:id', async (req,res)=>{
+    const id = req.params.id
+    const {title,subtitle,description} = req.body
+    const updated_blog = await Blog.findByIdAndUpdate(id,{
+        title : title,
+        subtitle : subtitle,
+        description : description
+    })
+    
+    res.status(202).json({
+        message : "data is accepted",
+        data : updated_blog
+    })
 })
 
 app.listen(process.env.PORT_NUMBER,()=>{
