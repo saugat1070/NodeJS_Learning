@@ -10,3 +10,49 @@ port no:- 0 - 65535
 To automatic update server:-
 
 node --watch app.js 
+
+dataBase Connection:
+npm install mongodb
+-> check network status on mongodb
+
+What do middlewares do?
+Answer: middlewares functions can perform the following tasks:
+-> Execute any code
+-> Make changes to the request and the response objects
+-> End the request-response cycle
+-> Call the next middlewares function in the stack
+
+//Middleware
+app.use(()=>{
+    console.log("I am middleware")
+})
+
+async for:
+db communication,network/api request
+
+//install .env
+npm install dotenv
+require('.dotenv').config() --> in every top of file
+
+if hamilai npm package bata project run garnu cha vane:-
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node --watch index.js"
+  }
+
+scripts maa 'start' key maa 'node --watch index.js' value rakhnu parcha ani npm start le kaam garcha
+
+
+file naming method:-
+1. blog-model.js = kebab case
+2. blog_model.js = snake case 
+3. BlogModel  = pascal case
+4. blogModel = camel case
+
+request.body bata aako data lai handle garna 
+---> use middleware 'app.use(express.json())'
+
+for handling multipart/form-data, we use multer middleware which is 
+used for uploading files. It is written on top of busboy for maximun efficency
+--> npm install multer
