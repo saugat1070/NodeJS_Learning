@@ -124,13 +124,32 @@ app.delete('/blog/:id',async (req,res)=>{
     });
 })
 
-app.patch('/blog/:id', async (req,res)=>{
+app.patch('/blog/:id',upload.single('image'), async (req,res)=>{
     const id = req.params.id
+    let new_fileName = null;
+    if(req.file){
+        new_fileName = req.file.filename
+        const blog = await Blog.findById(id)
+        const fileName = blog.image
+
+        fs.unlink(`storage/${fileName}`,(err)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log('file deleted');
+            }
+        })
+
+
+
+    }
     const {title,subtitle,description} = req.body
     const updated_blog = await Blog.findByIdAndUpdate(id,{
         title : title,
         subtitle : subtitle,
-        description : description
+        description : description,
+        image : new_fileName
     })
     
     res.status(202).json({
