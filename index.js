@@ -52,9 +52,6 @@ app.post('/blog',upload.single('image'),async (req,res)=>{
     })
 })
 
-app.listen(process.env.PORT_NUMBER,()=>{
-    console.log("NodeJs project has started");
-});
 
 app.post('/image_upload',upload.single('image'),async (req,res)=>{
     let filename = null
@@ -91,3 +88,30 @@ app.get("/blog",async (req,res)=>{
     })
 })
 
+app.get("/blog/:id", async (req,res)=>{
+    // console.log(req.params.id);
+    const id = req.params.id
+    const blog_id = await Blog.findById(id);
+    if(!blog_id){
+        return res.status(400).json({
+            message : "id is not sent"
+        });
+    }
+    return res.status(200).json({
+        message : "blog by id is fetch successfully",
+        data : blog_id
+    });
+   
+})
+
+app.delete('/blog/:id',async (req,res)=>{
+    const param_id = req.params.id
+    await Blog.findByIdAndDelete(param_id);
+    res.status(200).json({
+        message : "blog is deleted"
+    });
+})
+
+app.listen(process.env.PORT_NUMBER,()=>{
+    console.log("NodeJs project has started");
+});
